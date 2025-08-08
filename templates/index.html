@@ -7,22 +7,53 @@
   <link rel="stylesheet" href="/static/css/style.css"/>
 </head>
 <body>
+
+  <!-- Splash / Welcome Screen -->
   <div id="welcome-screen">
     <h1>Good morning.</h1>
     <p>What’s your dealer name?</p>
-    <form method="POST" enctype="multipart/form-data">
-      <input type="text" name="dealer" placeholder="Enter your dealer name" required />
-      <input type="text" name="vin" placeholder="VIN Number" required />
-      <input type="text" name="km" placeholder="KM (e.g., 123456)" required />
-      <textarea name="notes" placeholder="Notes or vehicle condition (optional)"></textarea>
-      <input type="email" name="email" placeholder="Your Email (optional)" />
-      <input type="text" name="phone" placeholder="Your Phone (optional)" />
-      <input type="file" name="images" multiple />
-      <button type="submit">Submit Appraisal</button>
-    </form>
+    <input type="text" id="dealer-name" placeholder="Enter your dealer name" />
+    <button onclick="startApp()">Continue</button>
     <div class="footer-brand">myappraisal.ca</div>
   </div>
+
+  <!-- Appraisal Form (initially hidden) -->
+  <form id="app-form" method="POST" enctype="multipart/form-data" style="display: none;">
+    <input type="hidden" name="dealer" id="hidden-dealer" />
+    <input type="text" name="vin" placeholder="VIN Number" required />
+    <input type="text" name="km" placeholder="KM (e.g., 123456)" required />
+    <input type="file" name="images" multiple />
+    <textarea name="notes" placeholder="Notes or vehicle condition (optional)"></textarea>
+    <input type="email" name="email" placeholder="Your Email (optional)" />
+    <input type="text" name="phone" placeholder="Your Phone (optional)" />
+    <button type="submit">Submit Appraisal</button>
+    <p class="funny-message">"Does it run? Does it roll? Or is it rust with a goal?"</p>
+  </form>
+
+  <!-- Optional: Scanner Launch (optional for later) -->
+  <div id="scanner" style="display: none;"></div>
+
+  <script>
+    function startApp() {
+      const dealerName = document.getElementById('dealer-name').value.trim();
+      if (dealerName) {
+        localStorage.setItem('dealerName', dealerName);
+        document.getElementById('hidden-dealer').value = dealerName;
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('app-form').style.display = 'flex';
+      }
+    }
+
+    window.onload = () => {
+      const storedDealer = localStorage.getItem('dealerName');
+      if (storedDealer) {
+        document.getElementById('hidden-dealer').value = storedDealer;
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('app-form').style.display = 'flex';
+      }
+    };
+  </script>
+
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </body>
 </html>
-
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
